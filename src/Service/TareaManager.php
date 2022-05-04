@@ -5,18 +5,22 @@ namespace App\Service;
 use App\Entity\Tarea;
 use App\Repository\TareaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TareaManager
 {
     private $entityManager;
     private $tareaRepository;
+    private $validator;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        TareaRepository $tareaRepository
+        TareaRepository $tareaRepository,
+        ValidatorInterface $validator
     ) {
         $this->entityManager = $entityManager;
         $this->tareaRepository = $tareaRepository;
+        $this->validator = $validator;
     }
 
     public function crear(Tarea $tarea) : void {
@@ -34,9 +38,7 @@ class TareaManager
     }
 
     public function validar(Tarea $tarea) {
-        $errores = [];
-        if (empty($tarea->getDescripcion())) {
-            $errores[] = "Campo 'descripción' obligatorio";
-        }
+        $errores = $this->validator->validate($tarea);
+        return $errores;
     }
 }
