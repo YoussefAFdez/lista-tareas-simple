@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\TareaRepository;
+use App\Validator as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @AppAssert\TareaUnica()
  * @ORM\Entity(repositoryClass=TareaRepository::class)
  */
 class Tarea
@@ -19,6 +22,7 @@ class Tarea
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="El campo descripción no puede estar vacío")
      */
     private $descripcion;
 
